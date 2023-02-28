@@ -5,7 +5,11 @@ Napisz konstruktor ustawiający te wartości.
 Zdefiniuj klasę Segment reprezentującą odcinek, posiadającą dwa prywatne punkty klasy Point.
 Wygeneruj akcesory i mutatory klasy Segment. Napisz publiczną metodę, która zwraca długość odcinka.
 W kolejnym kroku usuń mutatory i utwórz konstruktor ustawiający
-te pola na wartości swoich dwóch parametrów.*/
+te pola na wartości swoich dwóch parametrów.
+
+Zadanie 2.
+Zdefiniuj w klasie Segment publiczną metodę toSvg(),
+która zwróci napis zawierający kod języka znacznikowego SVG pozwalający wyświetlić tę linię.*/
 public class Main {
     public static void main(String[] args) {
         Point p1=new Point(3, 0);
@@ -13,6 +17,6 @@ public class Main {
         Segment segment=new Segment(p1, p2);
         double distance=segment.getDistance();
 
-        System.out.println(distance);
+        System.out.println(segment.getSvg());
     }
 }
