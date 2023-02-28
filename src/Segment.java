@@ -2,6 +2,7 @@ import java.util.Locale;
 public class Segment {
     private Point a;
     private Point b;
+
     //" <line x1="20" y1="20" x2="80" y2="80" style="stroke:black" />"
     //    String test = String.format(Locale.ENGLISH, " %f ", 2);
     public Segment(Point a, Point b){
