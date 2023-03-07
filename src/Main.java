@@ -13,8 +13,8 @@ która zwróci napis zawierający kod języka znacznikowego SVG pozwalający wy�
 
 public class Main {
     public static void main(String[] args) {
-        com.company.Point point = new com.company.Point(1,1);
-        com.company.Segment segment = new com.company.Segment(point, new com.company.Point(2,2));
+        Point point = new Point(1,1);
+        Segment segment = new Segment(point, new Point(2,2));
         System.out.println(segment.getSvg());
     }
 }

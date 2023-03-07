@@ -1,4 +1,4 @@
-
+import java.util.Locale;
 public class Polygon {
     private Point[] arr;
 
