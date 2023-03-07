@@ -1,33 +1,55 @@
-import java.util.Locale;
-public class Segment {
-    private Point a;
-    private Point b;
 
-    //" <line x1="20" y1="20" x2="80" y2="80" style="stroke:black" />"
-    //    String test = String.format(Locale.ENGLISH, " %f ", 2);
-    public Segment(Point a, Point b){
-        this.a=a;
-        this.b=b;
+
+import java.util.Locale;
+
+public class Segment {
+    private Point p1;
+    private Point p2;
+
+    public Segment(Point p1, Point p2) {
+        this.p1 = p1;
+        this.p2 = p2;
     }
-    public Point getA() {
-        return a;
+
+    public Point getP1() {
+        return p1;
     }
-    public Point getB() {
-        return b;
+
+    public Point getP2() {
+        return p2;
     }
-    public void setA(Point a) {
-        this.a = a;
-    }
-    public void setB(Point b) {
-        this.b = b;
-    }
+
+//    public void setP2(Point p2) {
+//        this.p2 = p2;
+//    }
+
     public String getSvg(){
-        String result = String.format(Locale.ENGLISH,"<line x1=\"%.2f\" y1=\"%.2f\" x2=\"%.2f\" y2=\"%.2f\" style=\"stroke:black\" />", a.x, a.y, b.x, b.y);
+        String result = String.format(Locale.ENGLISH,"<line x1=\"%.2f\" y1=\"%.2f\" x2=\"%.2f\" y2=\"%.2f\" style=\"stroke:black\" />",p1.x,p1.y,p2.x,p2.y);
         return result;
     }
-    public double getDistance() {
-        double dx = b.x - a.x;
-        double dy = b.y - a.y;
-        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+    public double getDistance(){
+        double result = Math.sqrt(Math.pow(p1.x-p2.x, 2))+Math.sqrt(Math.pow(p1.y-p2.y, 2));
+        return result;
+    }
+
+    public static Segment[] perpendicular(Segment line, Point point, double r) {
+        double a;
+        a = (line.p1.y - line.p2.y) / (line.p1.x - line.p2.x);
+        double b;
+        a=-1/a;
+        b=point.y-a*point.x;
+
+        double x0 = point.x;
+        double y0 = point.y;
+        //double r = line.distance();
+
+        double root = Math.sqrt(-y0*y0+(2*a*x0+2*b)*y0-a*a*x0*x0-2*a*b*x0+(a*a+1)*r*r-b*b);
+        double x1 = -(root-a*y0-x0+a*b)/(a*a+1);
+        double y1 = -(a*root-a*a*y0-a*x0-b)/(a*a+1);
+        double x2 = (root+a*y0+x0-a*b)/(a*a+1);
+        double y2 = (a*root+a*a*y0+a*x0+b)/(a*a+1);
+
+        return new Segment[]{new Segment(point, new Point(x1,y1)), new Segment(point, new Point(x2,y2))};
     }
 }
