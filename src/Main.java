@@ -13,5 +13,10 @@ public class Main {
         scene.addShape(poly);
         scene.addShape(ellipse);
         scene.saveHtml("scene.html");
+
+        Shape translatedPoly = new TransformationDecorator.Builder()
+                .setTranslateVector(new Vec2(3.14, 14.3))
+                .setTranslateVector(new Vec2(3.14, 14.3))
+                .build(poly);
     }
 }
