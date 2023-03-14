@@ -1,39 +1,17 @@
 import java.util.Locale;
-public class Polygon {
-    private Point[] arr;
-    private Style style;
-    public Polygon(int count, Style style) {
-        arr = new Point[count];
-        this.style = style;
-    }
 
-    public void setPoint(int index, Point point) {
-        arr[index] = point;
-    }
+public class Polygon implements Shape {
+    Vec2 points[];
 
-    public void setPoints(Point[] points){
-        arr = points;
+    public Polygon(Vec2[] points) {
+        this.points = points;
     }
 
     public String toSvg() {
         String pointsString = "";
-        for(Point point : arr)
+        for(Vec2 point : points)
             pointsString += point.x + "," + point.y + " ";
 
-        return String.format(Locale.ENGLISH,"<polygon points=\"%s\" style=\"%s\" />",
-                pointsString, this.style.toSvg());
-    }
-
-    public Point getMaxCords(){
-        Point maxPoint = new Point(0,0);
-        for(Point point : arr){
-            if(point.x > maxPoint.x){
-                maxPoint.x = point.x;
-            }
-            if(point.y > maxPoint.y){
-                maxPoint.y = point.y;
-            }
-        }
-    return maxPoint;
+        return String.format(Locale.ENGLISH,"<polygon points=\"%s\" />", pointsString);
     }
 }
