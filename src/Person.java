@@ -15,6 +15,7 @@ public class Person implements Serializable {
     private LocalDate birth, death;
     private Person parents[] = new Person[2];
     private static List<Person> people = new ArrayList<>();
+    private String path;
     public Person(String name, LocalDate birth) {
         this(name, birth, null);
         people.add(this);
@@ -40,8 +41,8 @@ public class Person implements Serializable {
 
     }
 
-    public void setPath{
-
+    public void setPath(String path){
+        this.path=path;
     }
 
     public Person(String name, LocalDate birth, Person parent1, Person parent2) throws IncestException {
@@ -65,6 +66,7 @@ public class Person implements Serializable {
         person.setPath(path);
         return Person;
     }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -87,6 +89,4 @@ public class Person implements Serializable {
             }
         }
     }
-
-
 }

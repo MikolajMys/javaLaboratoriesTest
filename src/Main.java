@@ -79,9 +79,8 @@ public class Main {
             System.out.println(osoba.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
         } catch (AmbigiousPersonException e) {
-            System.out.println(e.path1+" "e.path2);
+            System.out.println(e.path1+" "+e.path2);
         }
 
     }
