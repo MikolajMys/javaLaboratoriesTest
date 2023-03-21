@@ -77,8 +77,11 @@ public class Main {
             Person osoba = Person.buildPerson(path);
             Person osoba2 = Person.buildPerson("test/test_same_osoby/Ewa Głaz.txt");
             System.out.println(osoba.toString());
-        } catch (FileNotFoundException | AmbigiousPersonException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+        } catch (AmbigiousPersonException e) {
+            System.out.println(e.path1+" "e.path2);
         }
 
     }

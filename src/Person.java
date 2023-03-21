@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.File;
@@ -13,19 +14,19 @@ public class Person implements Serializable {
     private String name;
     private LocalDate birth, death;
     private Person parents[] = new Person[2];
-    private static List<String> people = new ArrayList<>();
+    private static List<Person> people = new ArrayList<>();
     public Person(String name, LocalDate birth) {
         this(name, birth, null);
-        people.add(name);
+        people.add(this);
     }
 
-    
+
     public Person(String name, LocalDate birth, LocalDate death) {
         this.name = name;
         this.birth = birth;
         this.death = death;
         try {
-            people.add(name);
+            people.add(this);
             if (birth.isAfter(death)) {
                 throw new NegativeLifespanException(birth, death, "Possible time-space loophole.");
             }
@@ -37,7 +38,10 @@ public class Person implements Serializable {
         parents[0] = parent1;
         parents[1] = parent2;
 
-        checkForIncest();
+    }
+
+    public void setPath{
+
     }
 
     public Person(String name, LocalDate birth, Person parent1, Person parent2) throws IncestException {
@@ -53,10 +57,13 @@ public class Person implements Serializable {
         if(scanner.hasNextLine()){
             death = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         }
-        if(people.contains(name)){
-            throw new AmbigiousPersonException(name);
-        }
-        return new Person(name,birth,death);
+        for(var person : people){
+            if(person.name.equals(name)){
+                throw new AmbigiousPersonException(person.name,path,person.path);
+            }
+        Person person = new Person(name, birth, death);
+        person.setPath(path);
+        return Person;
     }
     @Override
     public String toString() {
