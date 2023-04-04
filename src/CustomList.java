@@ -1,5 +1,7 @@
+import java.util.AbstractList;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
-public class CustomList <T> {
+public class CustomList <T> extends AbstractList<T> {
     private class Node{
         T value;
         Node next;
@@ -59,25 +61,58 @@ public class CustomList <T> {
             first = first.next;
             return temp;
         }
-        public T removeLast() {
-            if (last == null) {
-                throw new NoSuchElementException();
+    public T removeLast() {
+        if (last == null) {
+            throw new NoSuchElementException();
+        }
+        else if(first == last){
+            T temp = last.value;
+            first = null;
+            last = null;
+            return temp;
+        }
+        else{
+            T temp = last.value;
+            Node currentNode = first;
+            while (currentNode.next != last){
+                currentNode = currentNode.next;
             }
-            else if(first == last){
-                T temp = last.value;
-                first = null;
-                last = null;
-                return temp;
-            }
-            else{
-                T temp = last.value;
+            currentNode.next = null;
+            last = currentNode;
+            return temp;
+        }
+    }
+        public boolean add(T t){
+            addLast(t);
+            return true;
+        }
+        @Override
+        public T get(int index){
+            if(index < size()){
                 Node currentNode = first;
-                while (currentNode.next != last){
+                for (int i = 0; i < index; i++) {
                     currentNode = currentNode.next;
                 }
-                currentNode.next = null;
-                last = currentNode;
-                return temp;
+                return currentNode.next;
             }
-    }
+            else{
+                throw new NoSuchElementException();
+            }
+        }
+
+        @Override
+        public int size(){
+            int countNode = 1;
+            if(first == null){
+                return 0;
+            }
+            else {
+                Node curretnNode = first;
+                while (curretnNode.next != last) {
+                    curretnNode = curretnNode.next;
+                    countNode++;
+                }
+                return countNode;
+            }
+        }
 }
