@@ -1,6 +1,7 @@
 import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 public class CustomList <T> extends AbstractList<T> {
     private class Node{
         T value;
@@ -82,37 +83,60 @@ public class CustomList <T> extends AbstractList<T> {
             return temp;
         }
     }
-        public boolean add(T t){
-            addLast(t);
-            return true;
-        }
-        @Override
-        public T get(int index){
-            if(index < size()){
-                Node currentNode = first;
-                for (int i = 0; i < index; i++) {
-                    currentNode = currentNode.next;
-                }
-                return currentNode.next;
+    public boolean add(T t){
+        addLast(t);
+        return true;
+    }
+    @Override
+    public T get(int index){
+        if(index < size()){
+            Node currentNode = first;
+            for (int i = 0; i < index; i++) {
+                currentNode = currentNode.next;
             }
-            else{
-                throw new NoSuchElementException();
-            }
+            return currentNode.next;
         }
+        else{
+            throw new NoSuchElementException();
+        }
+    }
 
-        @Override
-        public int size(){
-            int countNode = 1;
-            if(first == null){
-                return 0;
-            }
-            else {
-                Node curretnNode = first;
-                while (curretnNode.next != last) {
-                    curretnNode = curretnNode.next;
-                    countNode++;
-                }
-                return countNode;
-            }
+    @Override
+    public int size(){
+        int countNode = 1;
+        if(first == null){
+            return 0;
         }
+        else {
+            Node curretnNode = first;
+            while (curretnNode.next != last) {
+                curretnNode = curretnNode.next;
+                countNode++;
+            }
+            return countNode;
+        }
+    }
+    public Iterator<T> iterator() {
+        return new Iterator<T>(){
+            Node currentNode = first;
+            @Override
+            public boolean hasNext(){
+                return currentNode != null;
+            }
+            @Override
+            public T next() {
+                T value = currentNode.value;
+                currentNode = currentNode.next;
+                return value;
+            }
+        };
+    }
+    @Override
+    public Stream<T> stream() {
+        Stream.Builder<T> streamBuilder = Stream.builder();
+        for(T entry : this) {
+            streamBuilder.accept(entry);
+        }
+        return streamBuilder.build();
+    }
 }
