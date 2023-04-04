@@ -116,8 +116,9 @@ public class CustomList <T> extends AbstractList<T> {
             return countNode;
         }
     }
+    @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>(){
+        return new Iterator<T> iterator(){
             Node currentNode = first;
             @Override
             public boolean hasNext(){
