@@ -1,21 +1,16 @@
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.temporal.Temporal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Scanner;
 import java.util.*;
-
 
 public class Person implements Serializable {
     private String name;
     private LocalDate birth, death;
     private Person parents[] = new Person[2];
-    private static List<Person> people = new ArrayList<>();
-    private String path;
+    private String path=null;
+    private static List<Person> people = new ArrayList<Person>();
     public Person(String name, LocalDate birth) {
         this(name, birth, null);
         people.add(this);
@@ -38,34 +33,67 @@ public class Person implements Serializable {
         this(name, birth, death);
         parents[0] = parent1;
         parents[1] = parent2;
-
+        checkForIncest();
+    }
+    public Person(String name, LocalDate birth, Person parent1, Person parent2) throws IncestException {
+        this(name, birth, null, parent1, parent2);
     }
 
     public void setPath(String path){
         this.path=path;
     }
+    public static Person getPersonByName(String name) {
+        for(Person person:people){
+            if(person.name.equals(name)){
+                return person;
+            }
+        }
 
-    public Person(String name, LocalDate birth, Person parent1, Person parent2) throws IncestException {
-        this(name, birth, null, parent1, parent2);
+        return null;
     }
-
-    public static Person buildPerson(String path) throws FileNotFoundException, AmbigiousPersonException {
+    public static Person buildPerson(String path) throws FileNotFoundException, AmbigiousPersonException, IncestException {
         File file = new File(path);
         Scanner scanner = new Scanner(file);
         String name = scanner.nextLine();
         LocalDate birth =  LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         LocalDate death = null;
+        Person parent1 = null;
+        Person parent2 = null;
         if(scanner.hasNextLine()){
-            death = LocalDate.parse(scanner.nextLine(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        }
-        for(var person : people){
-            if(person.name.equals(name)){
-                throw new AmbigiousPersonException(person.name,path,person.path);
+            String line = scanner.nextLine();
+            if(!line.equals("Rodzice:")) {
+                death = LocalDate.parse(line, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                if(scanner.hasNextLine()) {
+                    line = scanner.nextLine();
+                }
             }
-        Person person = new Person(name, birth, death);
+            if(line.equals("Rodzice:")) {
+                line = scanner.nextLine();
+                parent1 = Person.getPersonByName(line);
+                if(scanner.hasNextLine()) {
+                    line = scanner.nextLine();
+                    parent2 = Person.getPersonByName(line);
+                }
+            }
+        }
+        for(Person person:people){
+            if(person.name.equals(name)){
+                throw new AmbigiousPersonException(name, path, person.path);
+            }
+        }
+        Person person = new Person(name,birth,death,parent1,parent2);
         person.setPath(path);
-        return Person;
+        return person;
     }
+        public static List<Person> buildPeople(List<String> paths) throws FileNotFoundException, AmbigiousPersonException {
+            List<Person> people = new ArrayList<>();
+
+            for (var path : paths){
+                people.add(Person.buildPerson(path));
+            }
+
+            return people;
+        }
 
     @Override
     public String toString() {
