@@ -69,7 +69,6 @@ public class CustomList <T> extends AbstractList<T> {
         else if(first == last){
             T temp = last.value;
             first = null;
-            last = null;
             return temp;
         }
         else{
